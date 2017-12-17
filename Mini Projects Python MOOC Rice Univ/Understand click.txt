@@ -1,0 +1,33 @@
+import simplegui
+import math
+
+#initialise globals
+width=400
+hight=400
+ball_pos=[width/2,hight/2]
+ball_radius=15
+ball_colour='red'
+
+#handler function
+
+def click(position):
+    global ball_pos
+    ball_pos=list(position)
+
+#main function
+
+
+
+def draw(canvas):
+    canvas.draw_circle(ball_pos,ball_radius,1,'black',ball_colour)
+    
+
+
+#regester handler
+frame=simplegui.create_frame('mouse click',width,hight)
+frame.set_mouseclick_handler(click)
+frame.set_canvas_background('white')
+frame.set_draw_handler(draw)
+
+#start frame
+frame.start()

@@ -1,0 +1,34 @@
+import simplegui
+import random 
+import math
+width=800
+hight=150
+number=[]
+control=range(0,16,1)
+
+def init():
+    for redundent in control:
+        gen=random.randrange(0,16,1)%8
+        number.append(gen)
+        flag=0
+        for redundent_1 in control:
+            if number[redundent_1]==number[redundent] and flag<2:
+                flag=flag+1
+            else :
+                number.pop[redundent_1]
+                flag=0
+
+            
+            
+    print number
+    
+
+def click():
+    pass
+
+def draw(canvas):
+    pass
+init()
+frame=simplegui.create_frame('memory',width,hight)
+frame.set_draw_handler(draw)
+frame.start()

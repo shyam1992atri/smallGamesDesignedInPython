@@ -1,0 +1,25 @@
+import simplegui
+number=0
+def increment(t):
+    num=int(t)
+    num=num+1
+    return str(num)
+
+
+def tick():
+    global number
+    number=number+1
+    print number
+    
+def draw(canvas):
+    canvas.draw_text(increment(number),[50,50],25,'White')
+    
+
+    
+frame=simplegui.create_frame('test',300,300)
+timer=simplegui.create_timer(1000,tick)
+frame.set_draw_handler(draw)
+frame.start()
+timer.start()
+
+#frame.set_canvas_background("Orange")  to change colour of canves

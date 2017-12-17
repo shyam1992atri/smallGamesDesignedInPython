@@ -1,0 +1,57 @@
+# Ball motion with an explicit timer
+
+import simplegui
+
+# Initialize globals
+width = 600
+hight = 400
+bar_hight_left=80
+bar_width_left=8
+bar_left=[bar_width_left/2,bar_hight_left/2]
+bar_hight_right=80
+bar_width_right=8
+bar_right=[bar_width_right/2+590,bar_hight_right/2]
+vel_left=[0,0]
+vel_right=[0,0]
+
+# define event handlers
+
+
+def draw(canvas):
+    canvas.draw_polygon([(bar_left[0]-bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]-bar_hight_left/2),(bar_left[0]-bar_width_left/2,bar_left[1]-bar_hight_left/2)],10,'white')
+    canvas.draw_polygon([(bar_right[0]-bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]-bar_hight_right/2),(bar_right[0]-bar_width_right/2,bar_right[1]-bar_hight_right/2)],10,'white')
+    bar_left[1]=bar_left[1]+vel_left[1]
+    bar_right[1]=bar_right[1]+vel_right[1]
+    if bar_left[1]<0+40:
+        vel_left[1]=-vel_left[1]
+    elif bar_left[1]>hight-1-40:
+        vel_left[1]=-vel_left[1]
+    elif bar_right[1]<0+40:
+        vel_right[1]=-vel_right[1]
+    elif bar_right[1]>hight-1-40:
+        vel_right[1]=-vel_right[1]
+
+    
+def keydown(key):
+    acc=1
+    if key==simplegui.KEY_MAP['down']:
+        vel_right[1]=vel_right[1]+acc
+    elif key==simplegui.KEY_MAP['up']:
+        vel_right[1]=vel_right[1]-acc
+    elif key==simplegui.KEY_MAP['s']:
+        vel_left[1]=vel_left[1]+acc
+    elif key==simplegui.KEY_MAP['w']:
+        vel_left[1]=vel_left[1]-acc    
+    
+                               
+# create frame
+frame = simplegui.create_frame("Motion", width, hight)
+
+# register event handlers
+frame.set_draw_handler(draw)
+frame.set_keydown_handler(keydown)
+
+
+# start frame
+frame.start()
+

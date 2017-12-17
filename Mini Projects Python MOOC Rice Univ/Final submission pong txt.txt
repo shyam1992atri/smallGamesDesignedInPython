@@ -1,0 +1,201 @@
+# Pong game By ShyamPrasad V Atri
+
+import simplegui
+import random
+
+# Initialize globals
+width = 600
+hight = 400
+total_hight=605
+total_width=800
+bar_hight_left=80
+bar_width_left=8
+bar_left=[bar_width_left/2,bar_hight_left/2+160]
+bar_hight_right=80
+bar_width_right=8
+bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+vel_left=[0,0]
+vel_right=[0,0]
+ball_radius = 20
+ball_pos=[width/2,hight/2]
+pad_width_1eft=10
+pad_width_right=590
+vel=[0,0]
+left_point=0
+right_point=0
+win_point=30
+
+
+# define event handlers
+def reset():
+    global vel_left,vel_right,vel,ball_pos,bar_left,bar_right
+    global left_point,right_point,win_point 
+    vel_left=[0,0]
+    vel_right=[0,0]
+    vel=[0,0]
+    ball_pos=[width/2,hight/2]
+    bar_left=[bar_width_left/2,bar_hight_left/2+160]
+    bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+    left_point=0
+    right_point=0
+    win_point=30
+
+def set_win_limit(limit):
+    global win_point
+    win_point=int(limit)
+     
+
+
+def draw(canvas):
+    global left_point,right_point,win_point
+    global bar_left,vel_left,vel_right,vel,bar_right,ball_pos
+    canvas.draw_polygon([(bar_left[0]-bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]+bar_hight_left/2),(bar_left[0]+bar_width_left/2,bar_left[1]-bar_hight_left/2),(bar_left[0]-bar_width_left/2,bar_left[1]-bar_hight_left/2)],3,'Red')
+    canvas.draw_polygon([(bar_right[0]-bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]+bar_hight_right/2),(bar_right[0]+bar_width_right/2,bar_right[1]-bar_hight_right/2),(bar_right[0]-bar_width_right/2,bar_right[1]-bar_hight_right/2)],3,'Blue')
+    bar_left[1]=bar_left[1]+vel_left[1]
+    bar_right[1]=bar_right[1]+vel_right[1]
+    if bar_left[1]<0+40:
+        vel_left[1]=-vel_left[1]
+    elif bar_left[1]>hight-1-40:
+        vel_left[1]=-vel_left[1]
+    elif bar_right[1]<0+40:
+        vel_right[1]=-vel_right[1]
+    elif bar_right[1]>hight-1-40:
+        vel_right[1]=-vel_right[1]
+    
+    ball_pos[0]=ball_pos[0]+vel[0]
+    ball_pos[1]=ball_pos[1]+vel[1]
+    if ball_pos[0]<=0+30:
+        if ball_pos[1]>=bar_left[1]-40 and ball_pos[1]<=bar_left[1]+40 :
+            vel[0]=-vel[0]
+            vel[1]=vel[1]
+            if ball_pos[0]>0:
+                vel[0]=vel[0]+0.25
+                vel[1]=vel[1]+0.25 
+            vel_left[0]=0
+            vel_left[1]=0
+            left_point=left_point+2
+            if left_point>=win_point :
+                vel_left=[0,0]
+                vel_right=[0,0]
+                vel=[0,0]
+                ball_pos=[width/2,hight/2]
+                bar_left=[bar_width_left/2,bar_hight_left/2+160]
+                bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+            
+            
+        else :
+            ball_pos[0]=width/2
+            ball_pos[1]=hight/2
+            vel[0]=-vel[0]+0.1
+            vel[1]=random.randrange(-3,3,1)
+            left_point=left_point-1
+            if left_point>=win_point :
+                vel_left=[0,0]
+                vel_right=[0,0]
+                vel=[0,0]
+                ball_pos=[width/2,hight/2]
+                bar_left=[bar_width_left/2,bar_hight_left/2+160]
+                bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+    elif ball_pos[0]>=width-1-30:
+        if ball_pos[1]>=bar_right[1]-40 and ball_pos[1]<=bar_right[1]+40 :
+            vel[0]=-vel[0]
+            vel[1]=vel[1]
+            if ball_pos[0]<width-1:
+                vel[0]=vel[0]-0.25
+                vel[1]=vel[1]-0.25
+            vel_right[0]=0
+            vel_right[1]=0
+            right_point=right_point+2
+            if right_point>=win_point:
+                vel_left=[0,0]
+                vel_right=[0,0]
+                vel=[0,0]
+                ball_pos=[width/2,hight/2]
+                bar_left=[bar_width_left/2,bar_hight_left/2+160]
+                bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+        else :
+            ball_pos[0]=width/2
+            ball_pos[1]=hight/2
+            vel[0]=-vel[0]-0.1
+            vel[1]=random.randrange(-3,3,1)
+            right_point=right_point-1
+            if right_point>=win_point:
+                vel_left=[0,0]
+                vel_right=[0,0]
+                vel=[0,0]
+                ball_pos=[width/2,hight/2]
+                bar_left=[bar_width_left/2,bar_hight_left/2+160]
+                bar_right=[bar_width_right/2+590,bar_hight_right/2+160]
+    elif ball_pos[1]<=0+ball_radius:
+        vel[1]=-vel[1]
+    elif ball_pos[1]>=hight-1-ball_radius:
+        vel[1]=-vel[1]
+    canvas.draw_circle(ball_pos,ball_radius, 2, "Red", "green")
+    canvas.draw_line([width/2,0],[width/2,hight],1,'Black')
+    canvas.draw_line([width,0],[width,hight],1,'Black')
+    canvas.draw_line([pad_width_1eft,0],[pad_width_1eft,hight],1,'Black')
+    canvas.draw_line([pad_width_right,0],[pad_width_right,hight],1,'Black')
+    canvas.draw_line([0,hight],[width,hight],1,'Black')
+    canvas.draw_text('Red player point '+str(left_point),[30,450],25,'red')
+    canvas.draw_text('Blue player point '+str(right_point),[350,450],25,'blue')
+    canvas.draw_text('How To play-This 2 player game',[10,480],20,'green')
+    canvas.draw_text('1.Set win point, press enter and Press space bar to start the game',[10,500],20,'brown')
+    canvas.draw_text('2.If the ball hits the coloured bar then 2 points is added ',[10,520],20,'brown')
+    canvas.draw_text('2.If the ball hits the black line near the coloured bar then 1 point is lost ',[10,540],20,'brown')
+    canvas.draw_text('3.If Any player reaches WIN POINT points the game stops,',[10,560],20,'brown')
+    canvas.draw_text('   the player with WIN POINT points or more than WIN POINT points wins the game  ',[10,580],20,'brown')
+    canvas.draw_text('4.Press reset to restart the game',[10,600],20,'brown')
+    canvas.draw_text('5.to make the game more challenging increase win point to 50 or 60 in the win point box',[270,600],15,'Red')
+    canvas.draw_text('default win point '+str(win_point),[200,425],25,'Black')
+    canvas.draw_text('controls RED',[625,60],20,'Red')
+    canvas.draw_text('w=move up',[625,80],20,'Red')
+    canvas.draw_text('s=move down',[625,100],20,'Red')
+    canvas.draw_text('r=stop bar from ',[625,120],20,'Red')
+    canvas.draw_text('  moving',[625,140],20,'Red')
+    canvas.draw_text('controls BLUE',[625,200],20,'Blue')
+    canvas.draw_text('up arrow=move up',[625,220],20,'blue')
+    canvas.draw_text('down arrow=move',[625,240],20,'blue')
+    canvas.draw_text('down',[725,260],20,'blue')
+    canvas.draw_text('b=stop bar from ',[625,280],20,'blue')
+    canvas.draw_text('  moving',[625,300],20,'blue')
+    
+
+    
+def keydown(key):
+    global vel_left,vel_right 
+    acc=1
+    if key==simplegui.KEY_MAP['down']:
+        vel_right[1]=vel_right[1]+acc
+    elif key==simplegui.KEY_MAP['up']:
+        vel_right[1]=vel_right[1]-acc
+    elif key==simplegui.KEY_MAP['s']:
+        vel_left[1]=vel_left[1]+acc
+    elif key==simplegui.KEY_MAP['w']:
+        vel_left[1]=vel_left[1]-acc
+    elif key==simplegui.KEY_MAP['space']:
+        vel[0]=random.randrange(-1,2,2)
+        vel[1]=random.randrange(-1,2,2)
+    elif key==simplegui.KEY_MAP['r']:
+        vel_left[0]=0
+        vel_left[1]=0
+    elif key==simplegui.KEY_MAP['b']:
+        vel_right[0]=0
+        vel_right[1]=0
+        
+        
+        
+
+    
+                               
+# create frame
+frame = simplegui.create_frame("Motion", total_width, total_hight)
+
+# register event handlers
+frame.set_draw_handler(draw)
+frame.set_keydown_handler(keydown)
+frame.set_canvas_background('gold')
+frame.add_button('Reset',reset,200)
+frame.add_input('win point',set_win_limit,200)
+
+# start frame
+frame.start()

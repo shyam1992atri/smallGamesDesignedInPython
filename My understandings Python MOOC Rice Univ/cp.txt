@@ -1,0 +1,111 @@
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+void main()
+{
+	float span, chord, lht, cl=1.17, clmax=2.28, ar, warea, a, e, a0=6.87, ecd=0.002, lgcd=0.0042;
+	float htvco, htarea, htar, htspan, htchord, flength, length, height, vtspan, fwidth=0.2;
+	float wmt=0.1214, wtl=0.199, vtmt=0.0902, vttl=0.3080, httl=0.3080, htmt=0.0902;
+	float fff, fcd, wff, wcf, wcd, htff, htcd, htcf, vtcf, vtcd, vtff, L;
+	float vass,vttchord, vtmchord, vtrchord, vtarea, fswet, cdmin, ffr, k, cd;
+	float freno, wreno, vtreno, htreno, creno=900;
+	float fcf,cl3d, t=(2.7*9.81), mass, gr=55, lift, vstall, vesti, tolift;
+	for(span=3.0;span<=3.4;span=span+0.1)
+	{
+		printf("------------span=%f----------------\n",span);
+		for(ar=5.4;ar<=6.2;ar=ar+0.1)
+		{
+			/*-----------------dimensions----------------------------*/
+			chord=span/ar;
+			warea=span*chord;
+			e=1.78*(1-0.045*pow(ar,0.68))-0.64;
+
+			a=a0/(1+(a0/(3.141*e*ar)));
+			htvco=a*(-0.1)*chord/8.02;
+			for(lht=0.3+0.75*chord;lht<=1.2;lht=lht+0.1)
+			{
+				for(vass=9;vass<=12;vass=vass+0.1)
+				{
+					htarea=(-htvco)*chord*warea/lht;
+					htar=0.75*ar;
+
+					htspan=sqrt(htarea*htar);
+					htchord=htarea/htspan;
+					flength=lht+0.2;
+					length=0.1778+flength+0.75*htchord;
+					height=0.2+fwidth;
+					vtspan=5.6-length-span-height;
+					vtrchord=htchord*1.5;
+					vttchord=0.5*htchord;
+					vtmchord=(vtrchord+vttchord)/2;
+					vtarea=vtspan*vtmchord;
+					/*---------------drag estimaton------------------------*/
+					ffr=flength/fwidth;
+					fff=1+60/pow(ffr,3)+ffr/400;
+					freno=1.225*vass*flength/0.018;
+
+					if(freno<=creno)
+					{
+						fcf=1.328/sqrt(freno*1000);
+
+					}
+					else
+					{
+						fcf=0.455/(pow(log10(freno*1000),2.58));
+
+					}
+					fswet=flength*4*fwidth;
+					fcd=fff*fcf*fswet/warea;
+					if(wtl>=0.3)
+						L=1.2;
+					else
+						L=2;
+					wff=(1+L*(wmt)/wtl+100*pow(wmt,4));
+
+					wreno=1.225*vass*chord/0.018;
+					wcf=1.328/sqrt(wreno*1000);
+					wcd=wff*wcf*2;
+					htreno=1.225*vass*htchord/0.018;
+					if(httl>=0.3)
+						L=1.2;
+					else
+						L=2;
+					htff=(1+L*(htmt)/httl+100*pow(htmt,4));
+
+					htcf=1.328/sqrt(htreno*1000);
+					htcd=htff*htcf*htarea*2/warea;
+					vtreno=1.225*vass*vtmchord/0.018;
+					if(vttl>=0.3)
+						L=1.2;
+					else
+						L=2;
+					vtff=(1+L*(vtmt)/vttl+100*pow(vtmt,4));
+					vtcf=1.328/sqrt(vtreno*1000);
+					vtcd=vtff*vtcf*vtarea*2/warea;
+					cdmin=fcd+wcd+htcd+vtcd+lgcd+ecd;
+					k=1/(3.141*ar*e);
+					cd=cdmin+k*pow(cl,2);
+
+
+					/*---------------weight estimation-----------------------*/
+					if((2*t-cd*1.225*pow(vass,2)*span*chord)>0.0)
+					{
+
+					mass=cd*1.225*span*chord*gr/(log(2*t/(2*t-cd*1.225*pow(vass,2)*span*chord)));
+					lift=mass*9.81;
+
+					vstall=pow(lift/(0.5*1.225*warea*0.8*clmax),0.5);
+					vesti=vstall*1.2;
+					tolift=0.5*1.225*vass*vass*span*chord*0.8*clmax;
+
+					if(((vesti-vass)<0.01)&&((vesti-vass)>(-0.01)))
+					printf("span=%f\tar=%f\tchord=%f\tlht=%f\tt vol co=%f\thtarea=%f\thtspan=%f\thtchord=%f\tvtrchord=%f\tvttchord=%f\tvtspan=%f\tcd=%f\tvass=%f\tvesti=%f\tlift=%f\tmass=%f\ttolift=%f\ttoweight=%f\te=%f\n\n",span,ar,chord,lht,htvco,htarea,htspan,htchord,vtrchord,vttchord,vtspan,cd,vass,vesti,lift,mass,tolift,tolift/9.81,e);
+					}
+
+
+
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,35 @@
+import simplegui
+
+width=800
+hight=150
+total_hight=500
+num_list=[0,1,2,3,4,5,6,7]
+card_width=50
+card_point=[0,card_width,hight,0]
+card_center=[card_width/2,hight/2]
+
+
+def click(pos):
+    pass
+
+   
+
+def draw(canvas):
+    global card_point
+    canvas.draw_line([0,hight],[width,hight],2,'green')
+    canvas.draw_polygon([(card_point[0],card_point[3]),(card_point[1],card_point[3]),(card_point[1],card_point[2]),(card_point[0],card_point[2])],2,'red','aquamarine')
+    
+
+    #for card in card_point:
+        #canvas.draw_polygon([(card_point[0],card_point[3]),(card_point[0],card_point[1]),(card_point[1],card_point[2]),(card_point[0],card_point[2])],2,'red')
+        #card_point[0]=card_point[0]+card_width
+        #card_point[1]=card_point[1]+card_width
+        #canvas.draw_polygon([(card[0]-card_width/2,card[1]-hight/2),(card[0]+card_width/2,card[1]-hight/2),(card[0]+card_width/2,card[1]+hight/2),(card_center[0]+card_width/2,card[1]-hight/2)],2,'yellow')
+        #canvas.draw_polygon([(card[0]-card_width/2,card[1]-hight/2),(card[0]+card_width/2,card[1]-hight/2),(card[0]+card_width/2,card[1]+hight/2),(card[0]+card_width/2,card[1]-hight/2)],2,'yellow')
+  
+
+frame=simplegui.create_frame('memory game',width,total_hight)
+frame.set_canvas_background('lavender')
+frame.set_draw_handler(draw)
+
+frame.start()
